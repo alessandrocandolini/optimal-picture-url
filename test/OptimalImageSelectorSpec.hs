@@ -43,20 +43,20 @@ spec =
 
     it "should always return the picture matching the width, whenever there is one and only one picture in the input that matches the expected size" $
       property $
-        \w k h u m pId ->
-          let p = Picture h w u
-              f (Picture _ b _) = b /= w
-              m' = M.filter f m
-              m'' = M.insert k p m'
+        \w h u k m pId ->
+          let matchingPicture = Picture h w u
+              filterByWidth = (w /=) . width
+              m' = M.filter filterByWidth m
+              m'' = M.insert k matchingPicture m'
               pd = PictureData pId m''
-           in choosePicture w pd == Just p
+           in choosePicture w pd == Just matchingPicture
 
     it "should return the picture with the size closer to the desire size" $
       property $
         \w m pId ->
           let p = choosePicture w (PictureData pId m)
            in isJust p
-                ==> let distance a = abs (width a - w)
+                ==> let distance = abs . (w -) . width
                         p' = fromJust p -- todo unsafe runtime cast
                         d = distance p'
                      in (not . any ((< d) . distance) . filter (p' /=)) (values m)
