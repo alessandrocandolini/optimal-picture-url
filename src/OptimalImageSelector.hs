@@ -7,7 +7,7 @@ import qualified Data.List.NonEmpty as N
 import Data.Map (Map)
 import qualified Data.Map as M
 
--- TODO add refined types to sizes
+-- TODO add refined types to sizes?
 
 newtype Size = Size Int
   deriving (Eq, Show)
@@ -21,7 +21,8 @@ newtype PictureWidth = PictureWidth Size
   deriving (Eq, Show)
   deriving (Num, Ord) via Size
 
-newtype PictureUrl = PictureUrl String deriving (Eq, Show)
+newtype PictureUrl = PictureUrl String
+  deriving (Eq, Show)
 
 data PictureData = PictureData
   { id :: Integer,
@@ -46,7 +47,7 @@ choosePictureFromList :: PictureWidth -> [Picture] -> Maybe Picture
 choosePictureFromList w l = choosePictureFromNonEmpty w <$> N.nonEmpty l
 
 choosePictureFromNonEmpty :: PictureWidth -> NonEmpty Picture -> Picture
-choosePictureFromNonEmpty w l = N.head (N.map fst (N.sortBy g (N.map f l)))
+choosePictureFromNonEmpty w = N.head . N.map fst . N.sortBy sortByDistance . N.map toPairWithDistance
   where
-    f p@(Picture _ w' _) = (p, abs (w' - w))
-    g (_, d) (_, d') = compare d d'
+    toPairWithDistance p@(Picture _ w' _) = (p, abs (w' - w))
+    sortByDistance (_, d) (_, d') = compare d d'

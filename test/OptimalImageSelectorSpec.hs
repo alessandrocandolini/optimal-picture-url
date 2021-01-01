@@ -38,7 +38,7 @@ spec =
     it "should always return something if there are input pictures" $
       property $
         \w m pId -> (not . null) m ==> isJust (choosePicture w (PictureData pId m))
-    it "should always return the picture with matching size, if present" $
+    it "should always return the picture matching the width, whenever there is one and only one in the input" $
       property $
         \w k h u m pId ->
           let p = Picture h w u
