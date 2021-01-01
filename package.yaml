@@ -1,0 +1,48 @@
+name:                optimal-url
+version:             0.1.0.0
+
+dependencies:
+- base >= 4.7 && < 5
+- text
+- containers
+
+default-extensions:
+- OverloadedStrings
+
+ghc-options:
+  - -Wall
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  optimal-url-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - optimal-url
+
+tests:
+  optimal-url-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - optimal-url
+    - hspec
+    - hspec-discover
+    - QuickCheck
+
+
+verbatim:
+  cabal-version: 3.0

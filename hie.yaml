@@ -1,0 +1,14 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "optimal-url:lib"
+
+    - path: "./app/Main.hs"
+      component: "optimal-url:exe:optimal-url-exe"
+
+    - path: "./app/Paths_haskell_toy_example.hs"
+      component: "optimal-url:exe:optimal-url-exe"
+
+    - path: "./test"
+      component: "optimal-url:test:optimal-url-test"
+
