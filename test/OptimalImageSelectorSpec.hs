@@ -60,4 +60,4 @@ spec =
                 ==> let distance = abs . (-) w . width
                         p' = fromJust p -- todo unsafe runtime cast
                         d = distance p'
-                     in (not . any ((< d) . distance) . filter (p' /=)) (values m)
+                     in (all (>= d) . fmap distance . values) m
