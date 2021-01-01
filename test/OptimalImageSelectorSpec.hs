@@ -30,6 +30,9 @@ pictureGen :: Gen Picture
 pictureGen =
   Picture <$> arbitrary <*> arbitrary <*> arbitrary
 
+allValues :: (a -> Bool) -> Map k a -> Bool
+allValues p = all p . values
+
 spec :: Spec
 spec =
   describe "choosePicture" $ do
@@ -44,11 +47,10 @@ spec =
     it "should always return the picture matching the width, whenever there is one and only one picture in the input that matches the expected size" $
       property $
         \w h u k m pId ->
-          let matchingPicture = Picture h w u
-              filterByWidth = (w /=) . width
-              m' = (M.insert k matchingPicture . M.filter filterByWidth) m
-              pd = PictureData pId m'
-           in choosePicture w pd == Just matchingPicture
+          allValues ((w /=) . width) m
+            ==> let p = Picture h w u
+                    m' = M.insert k p m
+                 in choosePicture w (PictureData pId m') == Just p
 
     it "should return the picture with the size closer to the desire size" $
       property $
