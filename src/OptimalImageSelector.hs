@@ -44,10 +44,7 @@ choosePicture :: PictureWidth -> PictureData -> Maybe Picture
 choosePicture w (PictureData _ m) = choosePictureFromList w (values m)
 
 choosePictureFromList :: PictureWidth -> [Picture] -> Maybe Picture
-choosePictureFromList w l = choosePictureFromNonEmpty w <$> N.nonEmpty l
+choosePictureFromList w = fmap (choosePictureFromNonEmpty w) . N.nonEmpty
 
 choosePictureFromNonEmpty :: PictureWidth -> NonEmpty Picture -> Picture
-choosePictureFromNonEmpty w = N.head . N.map fst . N.sortBy sortByDistance . N.map toPairWithDistance
-  where
-    toPairWithDistance p@(Picture _ w' _) = (p, abs (w' - w))
-    sortByDistance (_, d) (_, d') = compare d d'
+choosePictureFromNonEmpty w = N.head . N.sortWith (abs . (w -) . width)
