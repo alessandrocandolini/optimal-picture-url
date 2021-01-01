@@ -9,6 +9,8 @@ import Test.QuickCheck
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Property
 
+-- TODO orphan instances
+
 instance Arbitrary Picture where
   arbitrary = pictureGen
 
@@ -31,14 +33,15 @@ pictureGen =
 spec :: Spec
 spec =
   describe "choosePicture" $ do
-    it "should return Nothing if there are no pictures" $
+    it "should return no picture if no picture is provided as input" $
       property $
         \w pId -> isNothing (choosePicture w (PictureData pId M.empty))
 
-    it "should always return something if there are input pictures" $
+    it "should return no picture only if there are no input pictures (ie, always return a picture when there are input pictures)" $
       property $
         \w m pId -> (not . null) m ==> isJust (choosePicture w (PictureData pId m))
-    it "should always return the picture matching the width, whenever there is one and only one in the input" $
+
+    it "should always return the picture matching the width, whenever there is one and only one picture in the input that matches the expected size" $
       property $
         \w k h u m pId ->
           let p = Picture h w u
