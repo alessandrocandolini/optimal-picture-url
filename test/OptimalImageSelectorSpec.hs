@@ -50,3 +50,13 @@ spec =
               m'' = M.insert k p m'
               pd = PictureData pId m''
            in choosePicture w pd == Just p
+
+    it "should return the picture with the size closer to the desire size" $
+      property $
+        \w m pId ->
+          let p = choosePicture w (PictureData pId m)
+           in isJust p
+                ==> let distance a = abs (width a - w)
+                        p' = fromJust p -- todo unsafe runtime cast
+                        d = distance p'
+                     in (not . any ((< d) . distance) . filter (p' /=)) (values m)
