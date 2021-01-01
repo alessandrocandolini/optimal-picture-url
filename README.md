@@ -1,3 +1,5 @@
+![CI](https://github.com/alessandrocandolini/optimal-picture-url/workflows/CI/badge.svg)
+
 # optimal-url
 
 ## How to build and run locally
