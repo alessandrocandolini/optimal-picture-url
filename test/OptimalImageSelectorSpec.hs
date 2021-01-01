@@ -46,9 +46,8 @@ spec =
         \w h u k m pId ->
           let matchingPicture = Picture h w u
               filterByWidth = (w /=) . width
-              m' = M.filter filterByWidth m
-              m'' = M.insert k matchingPicture m'
-              pd = PictureData pId m''
+              m' = (M.insert k matchingPicture . M.filter filterByWidth) m
+              pd = PictureData pId m'
            in choosePicture w pd == Just matchingPicture
 
     it "should return the picture with the size closer to the desire size" $
@@ -56,7 +55,7 @@ spec =
         \w m pId ->
           let p = choosePicture w (PictureData pId m)
            in isJust p
-                ==> let distance = abs . (w -) . width
+                ==> let distance = abs . (-) w . width
                         p' = fromJust p -- todo unsafe runtime cast
                         d = distance p'
                      in (not . any ((< d) . distance) . filter (p' /=)) (values m)
