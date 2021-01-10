@@ -44,7 +44,7 @@ choosePicture :: PictureWidth -> PictureData -> Maybe Picture
 choosePicture w (PictureData _ m) = choosePictureFromList w (values m)
 
 choosePictureFromList :: PictureWidth -> [Picture] -> Maybe Picture
-choosePictureFromList w = fmap (choosePictureFromNonEmpty w) . N.nonEmpty
+choosePictureFromList w = fmap (choosePictureFromNonEmpty width w) . N.nonEmpty
 
-choosePictureFromNonEmpty :: PictureWidth -> NonEmpty Picture -> Picture
-choosePictureFromNonEmpty w = N.head . N.sortWith (abs . (w -) . width)
+choosePictureFromNonEmpty :: (Num w, Ord w) => (a -> w) -> w -> NonEmpty a -> a
+choosePictureFromNonEmpty transform w = N.head . N.sortWith (abs . (w -) . transform)
