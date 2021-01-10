@@ -24,9 +24,8 @@ newtype PictureWidth = PictureWidth Size
 newtype PictureUrl = PictureUrl String
   deriving (Eq, Show)
 
-data PictureData = PictureData
-  { id :: Integer,
-    formats :: Map String Picture
+newtype PictureData = PictureData
+  { formats :: Map String Picture
   }
   deriving (Eq, Show)
 
@@ -41,7 +40,7 @@ values :: Map k a -> [a]
 values = fmap snd . M.toList
 
 choosePicture :: PictureWidth -> PictureData -> Maybe Picture
-choosePicture w (PictureData _ m) = choosePictureFromList w (values m)
+choosePicture w (PictureData f) = choosePictureFromList w (values f)
 
 choosePictureFromList :: PictureWidth -> [Picture] -> Maybe Picture
 choosePictureFromList w = fmap (choosePictureFromNonEmpty width w) . N.nonEmpty

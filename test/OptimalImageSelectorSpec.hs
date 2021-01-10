@@ -5,6 +5,7 @@ import qualified Data.Map as M
 import Data.Maybe
 import OptimalImageSelector
 import Test.Hspec
+import Test.Hspec.QuickCheck
 import Test.QuickCheck
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Property
@@ -30,34 +31,32 @@ pictureGen :: Gen Picture
 pictureGen =
   Picture <$> arbitrary <*> arbitrary <*> arbitrary
 
-allValues :: (a -> Bool) -> Map k a -> Bool
-allValues p = all p . values
+forAllValues :: (a -> Bool) -> Map k a -> Bool
+forAllValues p = all p . values
+
+isNotEmpty :: Map k a -> Bool
+isNotEmpty = not . M.null
 
 spec :: Spec
 spec =
   describe "choosePicture" $ do
-    it "should return no picture if no picture is provided as input" $
-      property $
-        \w pId -> isNothing (choosePicture w (PictureData pId M.empty))
+    prop "should return no picture IF no picture is provided as input" $
+      \w -> isNothing (choosePicture w (PictureData M.empty))
 
-    it "should return no picture only if there are no input pictures (ie, always return a picture when there are input pictures)" $
-      property $
-        \w m pId -> (not . null) m ==> isJust (choosePicture w (PictureData pId m))
+    prop "should return no picture ONLY IF there are no input pictures (ie, always return somethign when there are input pictures)" $
+      \w m -> isNotEmpty m ==> isJust (choosePicture w (PictureData m))
 
-    it "should always return the picture matching the width, whenever there is one and only one picture in the input that matches the expected size" $
-      property $
-        \w h u k m pId ->
-          allValues ((w /=) . width) m
-            ==> let p = Picture h w u
-                    m' = M.insert k p m
-                 in choosePicture w (PictureData pId m') == Just p
+    prop "should always return the picture matching the desired width, whenever there is one and only one picture in the input that matches the expected size" $
+      \w h u k m ->
+        forAllValues ((w /=) . width) m
+          ==> let p = Picture h w u
+                  m' = M.insert k p m
+               in choosePicture w (PictureData m') == Just p
 
-    it "should return the picture with the size closer to the desire size" $
-      property $
-        \w m pId ->
-          let p = choosePicture w (PictureData pId m)
-           in isJust p
-                ==> let distance = abs . (-) w . width
-                        p' = fromJust p -- todo unsafe runtime cast
-                        d = distance p'
-                     in (all (>= d) . fmap distance . values) m
+    prop "should return the picture with the size closer to the desire size" $
+      \w m ->
+        isNotEmpty m
+          ==> let distance = abs . (w -) . width
+                  p = fromJust $ choosePicture w (PictureData m)
+                  d = distance p
+               in (all (>= d) . fmap distance . values) m
