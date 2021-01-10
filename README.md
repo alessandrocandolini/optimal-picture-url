@@ -1,6 +1,10 @@
 ![CI](https://github.com/alessandrocandolini/optimal-picture-url/workflows/CI/badge.svg)
 
-# optimal-url
+# optimal-picture-url
+
+Simple exercise to extract from a collection of pictures at different resolutions, the picture with the best resolution according to a given screen width. 
+
+It's essentially just a call to `sortOn` :) but it allows to talk about PBTs, type design (eg, empty vs non-empty collection, optionality as lifting, etc) 
 
 ## How to build and run locally
 
