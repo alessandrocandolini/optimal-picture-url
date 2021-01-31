@@ -1,6 +1,16 @@
 {-# LANGUAGE DerivingVia #-}
 
-module OptimalImageSelector where
+module OptimalImageSelector
+  ( Size (..),
+    PictureHeight (..),
+    PictureWidth (..),
+    PictureUrl (..),
+    PictureData (..),
+    Picture (..),
+    values,
+    choosePicture,
+  )
+where
 
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as N
@@ -39,11 +49,14 @@ data Picture = Picture
 values :: Map k a -> [a]
 values = fmap snd . M.toList
 
+distance :: Num w => (a -> w) -> w -> a -> w
+distance f w = abs . (w -) . f
+
 choosePicture :: PictureWidth -> PictureData -> Maybe Picture
-choosePicture w (PictureData f) = choosePictureFromList w (values f)
+choosePicture w (PictureData f) = closestPoint width w (values f)
 
-choosePictureFromList :: PictureWidth -> [Picture] -> Maybe Picture
-choosePictureFromList w = fmap (choosePictureFromNonEmpty width w) . N.nonEmpty
+closestPoint :: (Num w, Ord w) => (a -> w) -> w -> [a] -> Maybe a
+closestPoint t w = fmap (closestPointNonEmpty t w) . N.nonEmpty
 
-choosePictureFromNonEmpty :: (Num w, Ord w) => (a -> w) -> w -> NonEmpty a -> a
-choosePictureFromNonEmpty transform w = N.head . N.sortWith (abs . (w -) . transform)
+closestPointNonEmpty :: (Num w, Ord w) => (a -> w) -> w -> NonEmpty a -> a
+closestPointNonEmpty t w = N.head . N.sortWith (distance t w)
