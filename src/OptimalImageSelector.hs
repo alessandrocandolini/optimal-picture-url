@@ -15,7 +15,7 @@ where
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as N
 import Data.Map (Map)
-import qualified Data.Map as M
+import Helpers (values)
 
 -- TODO add refined types to sizes?
 
@@ -46,12 +46,6 @@ data Picture = Picture
   }
   deriving (Eq, Show)
 
-values :: Map k a -> [a]
-values = fmap snd . M.toList
-
-distance :: Num w => (a -> w) -> w -> a -> w
-distance f w = abs . (w -) . f
-
 choosePicture :: PictureWidth -> PictureData -> Maybe Picture
 choosePicture w (PictureData f) = closestPoint width w (values f)
 
@@ -60,3 +54,5 @@ closestPoint t w = fmap (closestPointNonEmpty t w) . N.nonEmpty
 
 closestPointNonEmpty :: (Num w, Ord w) => (a -> w) -> w -> NonEmpty a -> a
 closestPointNonEmpty t w = N.head . N.sortWith (distance t w)
+  where
+    distance t' w' = abs . (w' -) . t'

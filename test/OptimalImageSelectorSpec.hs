@@ -3,6 +3,7 @@ module OptimalImageSelectorSpec where
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Maybe
+import Helpers (values)
 import OptimalImageSelector
 import Test.Hspec
 import Test.Hspec.QuickCheck
