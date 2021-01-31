@@ -58,7 +58,7 @@ spec =
         \w m ->
           isNotEmpty m
             ==> let p = fromJust $ choosePicture w (PictureData m)
-                 in (any (== p) . values) m
+                 in (elem p . values) m
 
     prop "should always return the picture matching the desired width, whenever there is one and only one picture in the input that matches the expected size" $
       \w h u k m ->
@@ -67,7 +67,7 @@ spec =
                   m' = M.insert k p m
                in choosePicture w (PictureData m') == Just p
 
-    prop "should return the picture with the size closer to the desire size" $
+    prop "should return the picture with the size closest to the desire size" $
       \w m ->
         isNotEmpty m
           ==> let distance = abs . (w -) . width
