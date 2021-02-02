@@ -2,12 +2,12 @@
 
 # optimal-picture-url
 
-Simple exercise to extract from a collection of pictures at different resolutions, the picture with the best resolution according to a given screen width. 
+Simple exercise to extract from a collection of pictures at different resolutions, the picture with the best resolution according to a given screen width. "Best" resolution here is defined as the resolution closest to the desired one (using the standard Euclidean distance between widths). 
 
 It's essentially just a call to `sortWith`. Nevertheless, it allows to illustrate few important points common in FP design: 
-* **property-driven design** and validation through property-based testing (PBT); PBTs will detect errors that are likely unexpected in this exercise; the exercise also serves an un example of the fact that PBTs are win-win: they lead to a better design (principled, lawful contracts) and they are more powerful, and at the same time they more expressiveness, without introducing conceptual overhead (quite the opposite instead, they remove accidental complexity from the tests). 
-* **reason with types**: for example, we will see that the output type is a `Maybe` just because the input list can be empty, and the output value is `Nothing` **if nad only if** the input list is empty; this can be easily represented by writing the core function in terms of a non-empty list and using lifting. 
-* **parametric polymorphism to have properties for free** (no need to write certain PBTs becuase they are automatically guarantee by purity and parametric polymorphism) 
+* **property-driven design** and validation through property-based testing (PBT); we will experience a case where PBTs are able to detect errors that are unlikely to be caught by traditional example-based testing techniques; this exercise will also serve as an un example of the fact that PBTs are win-win: they lead to a better design (principled, lawful contracts) and they are more powerful and more expressiveness, while at the same time they don't  introducing conceptual overhead (quite the opposite instead, they remove accidental complexity from how we write tests). 
+* **reasoning with types**: computations in context, optionality if and only if the input data is empty, information-preserving guarantees for free from the Functor laws by lifting the business logic to the `Maybe` monad at the edge, non-empty lists, etc. 
+* **parametric polymorphism to have properties for free** (no need to write certain PBTs because they are automatically guarantee by purity and parametric polymorphism) 
 
 
 ## How to build and run locally
