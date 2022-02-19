@@ -52,7 +52,10 @@ choosePicture w (PictureData f) = closestPoint width w (values f)
 closestPoint :: (Num w, Ord w) => (a -> w) -> w -> [a] -> Maybe a
 closestPoint t w = fmap (closestPointNonEmpty t w) . N.nonEmpty
 
+distance :: Num a => a -> a -> a
+distance = (abs .) . (-)
+
 closestPointNonEmpty :: (Num w, Ord w) => (a -> w) -> w -> NonEmpty a -> a
-closestPointNonEmpty t w = N.head . N.sortWith (distance t w)
+closestPointNonEmpty t w = N.head . N.sortWith distanceFromDesireSize
   where
-    distance t' w' = abs . (w' -) . t'
+    distanceFromDesireSize = distance w . t
