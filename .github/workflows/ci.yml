@@ -54,7 +54,7 @@ jobs:
     - name: Generate coverage report
       uses: 8c6794b6/hpc-codecov-action@v2
       with:
-        target: stack:blahblah-test
+        target: stack:optimal-url-test
         out: ./codecov.json
         verbose: true
 
