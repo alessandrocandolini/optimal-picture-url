@@ -1,4 +1,4 @@
-![CI](https://github.com/alessandrocandolini/optimal-picture-url/workflows/CI/badge.svg)
+![CI](https://github.com/alessandrocandolini/optimal-picture-url/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/alessandrocandolini/optimal-picture-url/branch/main/graph/badge.svg?token=W59QP5D1AA)](https://codecov.io/gh/alessandrocandolini/optimal-picture-url)
 
 # optimal-picture-url
 
