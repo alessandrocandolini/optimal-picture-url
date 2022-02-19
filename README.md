@@ -26,11 +26,17 @@ which is equivalent to
 ```
 stack build --test
 ```
+To run with test coverage
+```
+stack test --coverage
+```
+which generates a textual and HTML report.
+
 To run the executable,
 ```
-stack exec optimal-url-exe
+stack exec blahblah-exe
 ```
-For a faster feedback loop,
+For faster feedback loop,
 ```
 stack test --fast --file-watch
 ```
